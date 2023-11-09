@@ -7,6 +7,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <stdlib.h>
+#include <time.h>
 using namespace std;
 
 struct Cuenta {
@@ -25,7 +27,7 @@ int main(){
     int count = 0;
     int nline = 0;
     string line, word;
-    int num_cliens;
+    //int num_cliens;
     int filtro = 0;
     int filtro_codigo;
     int filtro_nombre;
@@ -44,13 +46,13 @@ int main(){
             switch (count)
             {
             case 0:
-                cliente[nline].ci = stoi(word);
+                cliente[nline].ci = stof(word);
                 break;
             case 1:
                 cliente[nline].client = word;
                 break;
             case 2:
-                cliente[nline].account_number = stoi(word);
+                cliente[nline].account_number = stof(word);
                 break;
             case 3:
                 cliente[nline].account_type = word;
@@ -60,10 +62,11 @@ int main(){
                 break;
             }
             count++;
+            
         }
         nline++;
         count = 0;
-        num_cliens++;
+        
     }
     
 
@@ -76,12 +79,12 @@ int main(){
     {
     case 1:
         cout << "A continuacion se visualizara la data de los clientes" << endl;
-        cout << "num de cuenta - nombre - tipo de cuenta" << endl;
-        for (int i = 0; i < num_cliens; i++)
+        cout << "| numero de cuenta |  nombre  |  tipo de cuenta    |" << endl;
+        for (int i = 0; i < nline; i++)
         {
-            cout << cliente[i].account_number << " ";
-            cout << cliente[i].client << " ";
-            cout << cliente[i].account_type << " ";
+            cout << " " << cliente[i].account_number << "  |";
+            cout << " " << cliente[i].client << " | ";
+            cout << " " << cliente[i].account_type << " ";
             cout << endl;
         }
         break;
