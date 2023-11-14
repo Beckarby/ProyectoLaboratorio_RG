@@ -7,9 +7,16 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <stdlib.h>
-#include <time.h>
+#include <bits/stdc++.h>
 using namespace std;
+
+template <typename T>
+int partition(T arr[], int start, int end);
+template <typename T>
+void Quicksort(T arr[], int start, int end);
+template <typename T>
+int binarySearch(T arr[],int n,T x);
+
 
 struct Cuenta {
     int ci;
@@ -29,9 +36,15 @@ int main(){
     string line, word;
     //int num_cliens;
     int filtro = 0;
-    int filtro_codigo;
+    float filtro_codigo;
     int filtro_nombre;
-    int filtro_cedula;
+    float filtro_cedula;
+    int result = 0;
+    float N;
+    float n;
+    float OrderByNumAccount[2000];
+    string OrderByNameClient[2000];
+    float OrderByID[2000];
 
     if(!data_client.is_open()){
         cout << "El archivo no ha sido encontrado" << endl;
@@ -68,6 +81,18 @@ int main(){
         count = 0;
         
     }
+    for (int i = 0; i < nline; i++)
+    {
+        OrderByID[i] = cliente[i].ci;
+        OrderByNameClient[i] = cliente[i].client;
+        OrderByNumAccount[i] = cliente[i].account_number;
+    }
+    n = sizeof(OrderByID) / sizeof(OrderByID[0]);
+    N = sizeof(OrderByNumAccount) / sizeof(OrderByNumAccount[0]);
+    
+    Quicksort(OrderByNumAccount, 0, N -1);
+    Quicksort(OrderByID, 0, n -1);
+
     
 
     cout << "|      MENU       |" << endl;
@@ -94,12 +119,30 @@ int main(){
         cout << "1.-codigo de cuenta" << endl;
         cout << "2.-nombre de cliente" << endl; 
         cout << "3.-cedula" << endl;
+        cin >> filtro;
         switch (filtro)
         {
         case 1:
+
             cout << "ha elegido buscar por codigo de cuenta" << endl;
             cout << "ingrese la cuenta a buscar" << endl;
             cin >> filtro_codigo;
+            
+            result = binarySearch(OrderByNumAccount, N, filtro_codigo);
+            if (result == -1)
+            {
+                cout << "el codigo de cuenta ingresado no esta presente en la base de datos" << endl;
+                return 0;
+            } else {
+                cout << "CLIENTE ENCONTRADO" << endl;
+                cout << "Posicion del cliente: " << result << endl;
+                cout << "Nombre: " << cliente[result].client << endl;
+                cout << "tipo de cuenta " << cliente[result].account_type << endl;
+                cout << "cedula: " << cliente[result].ci << endl;
+                cout << "estado de cuenta: " << cliente[result].suspend << endl;
+            }
+            
+
             break;
         
         case 2:
@@ -111,15 +154,66 @@ int main(){
             cout << "ha elegido el filtro por cedula" << endl;
             cout << "ingrese la cedula a buscar" << endl;
             cin >> filtro_cedula;
+            result = binarySearch(OrderByID, n, filtro_cedula);
+            if (result == -1)
+            {
+                cout << "La cedula ingresada no esta presente en la base de datos" << endl;
+            } else {
+                cout << "CLIENTE ENCONTRADO" << endl;
+                cout << "Nombre:" << cliente[result].client << endl;
+                cout << "Tipo de cuenta: " << cliente[result].account_type << endl;
+            }
+            
+            
+            
         }
         break;
     }
 
+}
 
+template <typename T>
+int partition(T arr[], int start, int end){
+	
+	int pivot = end;
+	int j = start;
+	for(int i=start;i<end;++i){
+		if(arr[i]<arr[pivot]){
+			swap(arr[i],arr[j]);
+			++j;
+		}
+	}
+	swap(arr[j],arr[pivot]);
+	return j;
+	
+}
 
-    
+// template function to perform quick sort on array arr
+template <typename T>
+void Quicksort(T arr[], int start, int end ){
 
+	if(start<end){
+		int p = partition(arr,start,end);
+        Quicksort(arr,start,p-1);
+        Quicksort(arr,p+1,end);
+	}
+	
+}
 
-
-
+template<typename T>
+int binarySearch(T arr[],int n,T x)
+{
+	int start = 0;
+	int end = n-1;
+	while(start<=end)
+	{
+		int mid = (start+end)/2;
+		if(arr[mid]==x)	
+			return mid;
+		else if(arr[mid]<x)	
+			start = mid + 1;
+		else	
+			end = mid - 1;
+	}
+	return -1;
 }
