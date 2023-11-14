@@ -3,6 +3,10 @@
 2.-Establecer un buscador por codigo de cuenta, nombre del cliente o cedula
 6.-Suspender cuentas de clientes y dar aviso de ello
 
+NO RECONOCE NOMBRES NI NUMEROS DE CUENTA
+LOS NUMEROS DE CUENTA QUIZAS SEAN NEGATIVOS
+
+
 */
 #include <iostream>
 #include <fstream>
@@ -21,9 +25,9 @@ int linearSearch(T arr[], int n, T x);
 
 
 struct Cuenta {
-    int ci;
-    string client;
-    int account_number;
+    long long int ci;
+    string client[1000];
+    long long int account_number;
     string account_type;
     string suspend;
 
@@ -38,19 +42,19 @@ int main(){
     string line, word;
     //int num_cliens;
     int filtro = 0;
-    float filtro_codigo;
+    long long int filtro_codigo;
     string filtro_nombre;
-    float filtro_cedula;
+    long long int filtro_cedula;
     int result = 0;
-    float N;
-    float n;
+    int N;
+    int n;
     int size;
-    float OrderByNumAccount[2000];
-    float UnOrderedNumAccount[2000];
+    long long int OrderByNumAccount[2000];
+    long long int UnOrderedNumAccount[2000];
     string OrderByNameClient[2000];
     string UnOrderedNameClient[2000];
-    float OrderByID[2000];
-    float UnOrderedClientID[2000];
+    long long int OrderByID[2000];
+    long long int UnOrderedClientID[2000];
 
     if(!data_client.is_open()){
         std::cout << "El archivo no ha sido encontrado" << endl;
@@ -62,16 +66,18 @@ int main(){
 
         while (getline (str, word, ','))
         {
+
             switch (count)
             {
             case 0:
-                cliente[nline].ci = stof(word);
+                cliente[nline].ci = stoll(word);
                 break;
             case 1:
-                cliente[nline].client = word;
+                cliente[nline].client[nline] = word;
+                cout << word << endl;
                 break;
             case 2:
-                cliente[nline].account_number = stof(word);
+                cliente[nline].account_number = stoll(word);
                 break;
             case 3:
                 cliente[nline].account_type = word;
@@ -87,12 +93,14 @@ int main(){
         count = 0;
         
     }
+    cout << nline;
     for (int i = 0; i < nline; i++)
-    {
+     {
+
         OrderByID[i] = cliente[i].ci;
         UnOrderedClientID[i] = cliente[i].ci;
-        OrderByNameClient[i] = cliente[i].client;
-        UnOrderedNameClient[i] = cliente[i].client;
+        OrderByNameClient[i] = cliente[i].client[i]; //en esta y en la linea de abajo hubieron cambios
+        UnOrderedNameClient[i] = cliente[i].client[i];
         OrderByNumAccount[i] = cliente[i].account_number;
         UnOrderedNumAccount[i] = cliente[i].account_number;
     }
@@ -100,9 +108,9 @@ int main(){
     N = sizeof(OrderByNumAccount) / sizeof(OrderByNumAccount[0]);
     size = sizeof(OrderByNameClient) / sizeof(OrderByNameClient[0]);
 
-    quicksort(OrderByNumAccount, 0, N -1);
-    quicksort(OrderByID, 0, n -1);
-    quicksort(OrderByNameClient, 0, size -1);
+    quicksort(OrderByNumAccount, 0, N - 1);
+    quicksort(OrderByID, 0, n - 1);
+    quicksort(OrderByNameClient, 0, size - 1);
 
     
 
@@ -149,10 +157,10 @@ int main(){
                 result = linearSearch(UnOrderedNumAccount, N, filtro_codigo);
                 std::cout << "Posicion del cliente: " << result << endl;
                 std::cout << "Nombre: " << cliente[result].client << endl;
-                std::cout << "tipo de cuenta " << cliente[result].account_type << endl;
+                std::cout << "tipo de cuenta: " << cliente[result].account_type << endl;
                 std::cout << "cedula: " << cliente[result].ci << endl;
                 if (cliente[result].suspend == "TRUE"){
-                    std::cout << "su cuenta ha sido suspendida " << endl;
+                    std::cout << "CUENTA SUSPENDIDA" << endl;
 
                 }
             }
@@ -173,11 +181,11 @@ int main(){
                 std::cout << "CLIENTE ENCONTRADO" << endl;
                 result = linearSearch(UnOrderedNameClient, size, filtro_nombre);
                 std::cout << "Nombre: " << cliente[result].client << endl;
-                std::cout << "" << cliente[result].ci << endl;
-                std::cout << " " << cliente[result].account_type << endl;
-                std::cout << " " << cliente[result].account_number << endl;
+                std::cout << "Cedula: " << cliente[result].ci << endl;
+                std::cout << "Tipo de Cuenta: " << cliente[result].account_type << endl;
+                std::cout << "Numero de Cuenta: " << cliente[result].account_number << endl;
                 if(cliente[result].suspend == "TRUE"){
-                    std::cout << "su cuenta esta suspendida" << endl;
+                    std::cout << "CUENTA SUSPENDIDA" << endl;
                 }
 
             }
@@ -198,7 +206,7 @@ int main(){
                 std::cout << "Tipo de cuenta: " << cliente[result].account_type << endl;
                 std::cout << "Numero de cuenta: " << cliente[result].account_number << endl;
                 if(cliente[result].suspend == "TRUE") {
-                    std::cout << "su cuenta esta suspendida" << endl;
+                    std::cout << "CUENTA SUSPENDIDA" << endl;
                 }
                 
             }
