@@ -13,9 +13,11 @@ using namespace std;
 template <typename T>
 int partition(T arr[], int start, int end);
 template <typename T>
-void Quicksort(T arr[], int start, int end);
+void quicksort(T arr[], int start, int end);
 template <typename T>
-int binarySearch(T arr[],int n,T x);
+int binarySearch(T arr[], int n, T x);
+template <typename T>
+int linearSearch(T arr[], int n, T x);
 
 
 struct Cuenta {
@@ -37,17 +39,21 @@ int main(){
     //int num_cliens;
     int filtro = 0;
     float filtro_codigo;
-    int filtro_nombre;
+    string filtro_nombre;
     float filtro_cedula;
     int result = 0;
     float N;
     float n;
+    int size;
     float OrderByNumAccount[2000];
+    float UnOrderedNumAccount[2000];
     string OrderByNameClient[2000];
+    string UnOrderedNameClient[2000];
     float OrderByID[2000];
+    float UnOrderedClientID[2000];
 
     if(!data_client.is_open()){
-        cout << "El archivo no ha sido encontrado" << endl;
+        std::cout << "El archivo no ha sido encontrado" << endl;
     }
 
     while (getline(data_client,line))
@@ -84,84 +90,117 @@ int main(){
     for (int i = 0; i < nline; i++)
     {
         OrderByID[i] = cliente[i].ci;
+        UnOrderedClientID[i] = cliente[i].ci;
         OrderByNameClient[i] = cliente[i].client;
+        UnOrderedNameClient[i] = cliente[i].client;
         OrderByNumAccount[i] = cliente[i].account_number;
+        UnOrderedNumAccount[i] = cliente[i].account_number;
     }
     n = sizeof(OrderByID) / sizeof(OrderByID[0]);
     N = sizeof(OrderByNumAccount) / sizeof(OrderByNumAccount[0]);
-    
-    Quicksort(OrderByNumAccount, 0, N -1);
-    Quicksort(OrderByID, 0, n -1);
+    size = sizeof(OrderByNameClient) / sizeof(OrderByNameClient[0]);
+
+    quicksort(OrderByNumAccount, 0, N -1);
+    quicksort(OrderByID, 0, n -1);
+    quicksort(OrderByNameClient, 0, size -1);
 
     
 
-    cout << "|      MENU       |" << endl;
-    cout << "1.- Cuentas clientes" << endl;
-    cout << "2.- Busqueda de clientes" << endl;
+    std::cout << "|      MENU       |" << endl;
+    std::cout << "1.- Cuentas clientes" << endl;
+    std::cout << "2.- Busqueda de clientes" << endl;
 
-    cin >> menu;
+    std::cin >> menu;
     switch (menu)
     {
     case 1:
-        cout << "A continuacion se visualizara la data de los clientes" << endl;
-        cout << "| numero de cuenta |  nombre  |  tipo de cuenta    |" << endl;
+        std::cout << "A continuacion se visualizara la data de los clientes" << endl;
+        std::cout << "| numero de cuenta |  nombre  |  tipo de cuenta    |" << endl;
         for (int i = 0; i < nline; i++)
         {
-            cout << " " << cliente[i].account_number << "  |";
-            cout << " " << cliente[i].client << " | ";
-            cout << " " << cliente[i].account_type << " ";
-            cout << endl;
+            std::cout << " " << cliente[i].account_number << "  |";
+            std::cout << " " << cliente[i].client << " | ";
+            std::cout << " " << cliente[i].account_type << " ";
+            std::cout << endl;
         }
         break;
     
     case 2:
-        cout << "elija modo de busqueda" << endl;
-        cout << "1.-codigo de cuenta" << endl;
-        cout << "2.-nombre de cliente" << endl; 
-        cout << "3.-cedula" << endl;
-        cin >> filtro;
+        std::cout << "elija modo de busqueda" << endl;
+        std::cout << "1.-codigo de cuenta" << endl;
+        std::cout << "2.-nombre de cliente" << endl; 
+        std::cout << "3.-cedula" << endl;
+        std::cin >> filtro;
         switch (filtro)
         {
         case 1:
 
-            cout << "ha elegido buscar por codigo de cuenta" << endl;
-            cout << "ingrese la cuenta a buscar" << endl;
-            cin >> filtro_codigo;
+            std::cout << "ha elegido buscar por codigo de cuenta" << endl;
+            std::cout << "ingrese la cuenta a buscar" << endl;
+            std::cin >> filtro_codigo;
             
             result = binarySearch(OrderByNumAccount, N, filtro_codigo);
             if (result == -1)
             {
-                cout << "el codigo de cuenta ingresado no esta presente en la base de datos" << endl;
+                std::cout << "el codigo de cuenta ingresado no esta presente en la base de datos" << endl;
                 return 0;
             } else {
-                cout << "CLIENTE ENCONTRADO" << endl;
-                cout << "Posicion del cliente: " << result << endl;
-                cout << "Nombre: " << cliente[result].client << endl;
-                cout << "tipo de cuenta " << cliente[result].account_type << endl;
-                cout << "cedula: " << cliente[result].ci << endl;
-                cout << "estado de cuenta: " << cliente[result].suspend << endl;
+                std::cout << "CLIENTE ENCONTRADO" << endl;
+                result = linearSearch(UnOrderedNumAccount, N, filtro_codigo);
+                std::cout << "Posicion del cliente: " << result << endl;
+                std::cout << "Nombre: " << cliente[result].client << endl;
+                std::cout << "tipo de cuenta " << cliente[result].account_type << endl;
+                std::cout << "cedula: " << cliente[result].ci << endl;
+                if (cliente[result].suspend == "TRUE"){
+                    std::cout << "su cuenta ha sido suspendida " << endl;
+
+                }
             }
             
 
             break;
         
         case 2:
-            cout << "ha elegido buscar por nombre de cliente" << endl;
-            cout << "ingrese el nombre a buscar" << endl;
-            cin >> filtro_nombre;
+            std::cout << "ha elegido buscar por nombre de cliente" << endl;
+            std::cout << "ingrese el nombre a buscar" << endl;
+            std::cin >> filtro_nombre;
+
+            result = binarySearch(OrderByNameClient, size, filtro_nombre);
+            if (result == -1){
+                std::cout << "El nombre ingresado no esta en la base de datos" << endl;
+                return 0;
+            } else {
+                std::cout << "CLIENTE ENCONTRADO" << endl;
+                result = linearSearch(UnOrderedNameClient, size, filtro_nombre);
+                std::cout << "Nombre: " << cliente[result].client << endl;
+                std::cout << "" << cliente[result].ci << endl;
+                std::cout << " " << cliente[result].account_type << endl;
+                std::cout << " " << cliente[result].account_number << endl;
+                if(cliente[result].suspend == "TRUE"){
+                    std::cout << "su cuenta esta suspendida" << endl;
+                }
+
+            }
             break;
         case 3:
-            cout << "ha elegido el filtro por cedula" << endl;
-            cout << "ingrese la cedula a buscar" << endl;
-            cin >> filtro_cedula;
+            std::cout << "ha elegido el filtro por cedula" << endl;
+            std::cout << "ingrese la cedula a buscar" << endl;
+            std::cin >> filtro_cedula;
             result = binarySearch(OrderByID, n, filtro_cedula);
             if (result == -1)
             {
-                cout << "La cedula ingresada no esta presente en la base de datos" << endl;
+                std::cout << "La cedula ingresada no esta presente en la base de datos" << endl;
             } else {
-                cout << "CLIENTE ENCONTRADO" << endl;
-                cout << "Nombre:" << cliente[result].client << endl;
-                cout << "Tipo de cuenta: " << cliente[result].account_type << endl;
+                std::cout << "CLIENTE ENCONTRADO" << endl;
+                result = linearSearch(UnOrderedClientID, n, filtro_cedula);
+                std::cout << "Nombre:" << cliente[result].client << endl;
+                std::cout << "Cedula: " << cliente[result].ci << endl;
+                std::cout << "Tipo de cuenta: " << cliente[result].account_type << endl;
+                std::cout << "Numero de cuenta: " << cliente[result].account_number << endl;
+                if(cliente[result].suspend == "TRUE") {
+                    std::cout << "su cuenta esta suspendida" << endl;
+                }
+                
             }
             
             
@@ -190,18 +229,18 @@ int partition(T arr[], int start, int end){
 
 // template function to perform quick sort on array arr
 template <typename T>
-void Quicksort(T arr[], int start, int end ){
+void quicksort(T arr[], int start, int end ){
 
 	if(start<end){
 		int p = partition(arr,start,end);
-        Quicksort(arr,start,p-1);
-        Quicksort(arr,p+1,end);
+        quicksort(arr,start,p-1);
+        quicksort(arr,p+1,end);
 	}
 	
 }
 
 template<typename T>
-int binarySearch(T arr[],int n,T x)
+int binarySearch(T arr[], int n, T x)
 {
 	int start = 0;
 	int end = n-1;
@@ -216,4 +255,18 @@ int binarySearch(T arr[],int n,T x)
 			end = mid - 1;
 	}
 	return -1;
+}
+
+template <typename T>
+int linearSearch(T arr[], int n, T x) {
+
+	for (int i = 0; i < n; ++i) {
+
+		if (arr[i] == x)
+			return i;
+
+	}
+
+	return -1;
+
 }
