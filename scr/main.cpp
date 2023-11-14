@@ -35,7 +35,7 @@ int main(){
     int filtro_nombre;
     int filtro_cedula;
     int result = 0;
-    int N;
+    int N = 0, c1 = 0 , c2 = 0;
     float resp = 0;
     float deposito = 0;
 
@@ -81,6 +81,7 @@ int main(){
     std::cout << "|      MENU       |" << endl;
     std::cout << "1.- Cuentas clientes" << endl;
     std::cout << "2.- Busqueda de clientes" << endl;
+    std::cout << "3.- realizar transferencias entre clientes" << endl;
 
     std::cin >> menu;
     switch (menu){
@@ -159,8 +160,8 @@ int main(){
         std::cout << "1.-codigo de cuenta" << endl;
         std::cout << "2.-nombre de cliente" << endl; 
         std::cout << "3.-cedula" << endl;
-        switch (filtro)
-        {
+        
+        switch (filtro){
         case 1:
             std::cout << "ha elegido buscar por codigo de cuenta" << endl;
             std::cout << "ingrese la cuenta a buscar" << endl;
@@ -193,6 +194,32 @@ int main(){
             
         }
         break;
+
+    case 3:
+     std::cout<< "Vamos a realizar transferencias " << endl;
+     std::cout<< "coloque cual es nu numero de cuenta para realizar la transferencia" << endl;
+     std::cin>> resp;
+
+     /*Aqui tiene que buscar de quien pertenece la cuenta */
+
+     std::cout << "Ha que cuenta quieres realizar la transferencia?? " << endl;
+     std::cout << "Coloque el numero de cuenta: " << endl;
+     std::cin>> resp;
+
+     /*Tiene que buscar el valor de la segunda persona al quien pertenece la segunda cuenta
+     
+     se debe guardar el numero de posicion que estan los 2 en 2 variables diferentes para hacer la comparacion
+     se puede utilizar c1 y c2 para cuenta 1 y cuenta 2 */
+
+     std::cout << "Cual es la cantidad a depositar: " << endl;
+     std::cin >> deposito;
+
+     cliente[c1].dinero_cliente = cliente[c1].dinero_cliente - deposito ;
+     cliente[c2].dinero_cliente = cliente[c2].dinero_cliente + deposito;
+
+     std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
+
+
     }
 
 }
