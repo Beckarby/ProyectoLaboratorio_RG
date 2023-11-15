@@ -220,6 +220,9 @@ int main(){
      cliente[c1].dinero_cliente = cliente[c1].dinero_cliente - deposito ;
      cliente[c2].dinero_cliente = cliente[c2].dinero_cliente + deposito;
 
+     registro << cliente[c1].client +","<<+cliente[c1].ci + "," <<cliente[c1].account_number + "," 
+     <<cliente[c2].account_number + "," <<+deposito ;
+
      std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
 
 
