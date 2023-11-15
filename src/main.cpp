@@ -4,7 +4,6 @@
 6.-Suspender cuentas de clientes y dar aviso de ello
 
 NO RECONOCE NOMBRES NI NUMEROS DE CUENTA
-LOS NUMEROS DE CUENTA QUIZAS SEAN NEGATIVOS
 
 
 */
@@ -12,6 +11,7 @@ LOS NUMEROS DE CUENTA QUIZAS SEAN NEGATIVOS
 #include <fstream>
 #include <sstream>
 #include <bits/stdc++.h>
+#include <string>
 using namespace std;
 
 template <typename T>
@@ -26,12 +26,12 @@ int linearSearch(T arr[], int n, T x);
 
 struct Cuenta {
     long long int ci;
-    string client[1000];
+    string client;
     long long int account_number;
     string account_type;
     string suspend;
 
-}cliente[2000];
+}cliente[1000];
 
 ifstream data_client("C:/Users/HOME/Desktop/trabajos/programas/ProyectoLaboratorio_RG/datos/clients.csv");
 
@@ -49,12 +49,12 @@ int main(){
     int N;
     int n;
     int size;
-    long long int OrderByNumAccount[2000];
-    long long int UnOrderedNumAccount[2000];
-    string OrderByNameClient[2000];
-    string UnOrderedNameClient[2000];
-    long long int OrderByID[2000];
-    long long int UnOrderedClientID[2000];
+    long long int OrderByNumAccount[1000];
+    long long int UnOrderedNumAccount[1000];
+    string OrderByNameClient[1000];
+    string UnOrderedNameClient[1000];
+    long long int OrderByID[1000];
+    long long int UnOrderedClientID[1000];
 
     if(!data_client.is_open()){
         std::cout << "El archivo no ha sido encontrado" << endl;
@@ -73,8 +73,7 @@ int main(){
                 cliente[nline].ci = stoll(word);
                 break;
             case 1:
-                cliente[nline].client[nline] = word;
-                cout << word << endl;
+                cliente[nline].client = word;
                 break;
             case 2:
                 cliente[nline].account_number = stoll(word);
@@ -93,14 +92,13 @@ int main(){
         count = 0;
         
     }
-    cout << nline;
-    for (int i = 0; i < nline; i++)
+    for (int i = 0; i < 1000; i++)
      {
 
         OrderByID[i] = cliente[i].ci;
         UnOrderedClientID[i] = cliente[i].ci;
-        OrderByNameClient[i] = cliente[i].client[i]; //en esta y en la linea de abajo hubieron cambios
-        UnOrderedNameClient[i] = cliente[i].client[i];
+        OrderByNameClient[i] = cliente[i].client; 
+        UnOrderedNameClient[i] = cliente[i].client;
         OrderByNumAccount[i] = cliente[i].account_number;
         UnOrderedNumAccount[i] = cliente[i].account_number;
     }
@@ -124,7 +122,7 @@ int main(){
     case 1:
         std::cout << "A continuacion se visualizara la data de los clientes" << endl;
         std::cout << "| numero de cuenta |  nombre  |  tipo de cuenta    |" << endl;
-        for (int i = 0; i < nline; i++)
+        for (int i = 0; i < 1000; i++)
         {
             std::cout << " " << cliente[i].account_number << "  |";
             std::cout << " " << cliente[i].client << " | ";
@@ -171,15 +169,17 @@ int main(){
         case 2:
             std::cout << "ha elegido buscar por nombre de cliente" << endl;
             std::cout << "ingrese el nombre a buscar" << endl;
-            std::cin >> filtro_nombre;
-
+            cin >> ws;
+            std::getline(std::cin, filtro_nombre);
             result = binarySearch(OrderByNameClient, size, filtro_nombre);
             if (result == -1){
                 std::cout << "El nombre ingresado no esta en la base de datos" << endl;
                 return 0;
             } else {
                 std::cout << "CLIENTE ENCONTRADO" << endl;
+
                 result = linearSearch(UnOrderedNameClient, size, filtro_nombre);
+                cout << result << endl;
                 std::cout << "Nombre: " << cliente[result].client << endl;
                 std::cout << "Cedula: " << cliente[result].ci << endl;
                 std::cout << "Tipo de Cuenta: " << cliente[result].account_type << endl;
