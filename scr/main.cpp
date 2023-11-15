@@ -215,17 +215,25 @@ int main(){
      se puede utilizar c1 y c2 para cuenta 1 y cuenta 2 */
 
      std::cout << "Cual es la cantidad a depositar: " << endl;
-     std::cin >> deposito;
 
-     cliente[c1].dinero_cliente = cliente[c1].dinero_cliente - deposito ;
-     cliente[c2].dinero_cliente = cliente[c2].dinero_cliente + deposito;
+     do{
+         std::cin >> deposito; // se usa la misma variable deposito para el retiro
+
+           if(cliente[N].dinero_cliente < deposito){
+             std::cout << "Debe colocar una cantidad menor o igual a la actual " << endl;
+             std::cout << "Ingrese valor valido: " << endl;
+
+            }else {
+             cliente[c1].dinero_cliente = cliente[c1].dinero_cliente - deposito ;
+             cliente[c2].dinero_cliente = cliente[c2].dinero_cliente + deposito;
+
+             std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
+            }
+
+         }while(cliente[N].dinero_cliente < deposito);
 
      registro << cliente[c1].client +","<<+cliente[c1].ci + "," <<cliente[c1].account_number + "," 
-     <<cliente[c2].account_number + "," <<+deposito ;
-
-     std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
-
-
+     <<cliente[c2].account_number + "," <<+deposito << endl;
     }
 
     registro.close();
