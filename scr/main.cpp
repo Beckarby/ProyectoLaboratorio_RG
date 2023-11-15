@@ -15,7 +15,7 @@ int linearSearch(int arr[], int N, int x);
 struct Cuenta {
     int ci;
     string client;
-    int account_number;
+    long long int account_number;
     string account_type;
     string suspend;
     int dinero_cliente;
@@ -36,8 +36,14 @@ int main(){
     int filtro_cedula;
     int result = 0;
     int N = 0, c1 = 0 , c2 = 0;
-    float resp = 0;
+    int resp = 0;
     float deposito = 0;
+    fstream registro;
+
+    fstream createfile("Registro.csv", ios::out);
+    createfile<< "nombre,C.i,cuenta,cuenta del deposito,monto" << endl;
+
+    registro.open("registro.csv", ios::app);
 
     if(!data_client.is_open()){
         std::cout << "El archivo no ha sido encontrado" << endl;
@@ -46,11 +52,8 @@ int main(){
     while (getline(data_client,line))
     {
         stringstream str(line);
-
-        while (getline (str, word, ','))
-        {
-            switch (count)
-            {
+        while (getline (str, word, ',')){
+            switch (count){
             case 0:
                 cliente[nline].ci = stof(word);
                 break;
@@ -58,7 +61,7 @@ int main(){
                 cliente[nline].client = word;
                 break;
             case 2:
-                cliente[nline].account_number = stof(word);
+                cliente[nline].account_number = stoll(word);
                 break;
             case 3:
                 cliente[nline].account_type = word;
@@ -70,7 +73,6 @@ int main(){
                 cliente[nline].dinero_cliente = 0.0;    
             }
             count++;
-            
         }
         nline++;
         count = 0;
@@ -98,13 +100,14 @@ int main(){
 
         std::cout << "Escribe tu numero de cuenta selecionar la cuenta bancaria" << endl;
         std::cin >> resp;
-
         do{
             N = N + 1 ;
+            cout << cliente[N].account_number << '\n';
+        }while(cliente[N].account_number != resp);
 
-        }while(cliente[N].account_number == resp);
 
-        std::cout << "Tu tipo de cuenta es:" << cliente[N].account_type ;
+        std::cout << N << endl;
+        std::cout << "Tu tipo de cuenta es:" << cliente[N].account_type << endl;
         if (cliente[N].dinero_cliente == 0){
             std::cout << "No tienes dineron en la cuenta haci que haga un deposito inicial" << endl;
             std::cout << "Ingrese la cantidad del deposito" << endl;
@@ -221,6 +224,8 @@ int main(){
 
 
     }
+
+    registro.close();
 
 }
 
