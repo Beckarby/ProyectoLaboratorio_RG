@@ -124,7 +124,7 @@ int main(){
     std::cout << "|      MENU       |" << endl;
     std::cout << "1.- Cuentas clientes" << endl;
     std::cout << "2.- Busqueda de clientes" << endl;
-    std::cout << "4.- Realizar Transferencias" << endl;
+    std::cout << "3.- Realizar Transferencias" << endl;
 
     std::cin >> menu;
     switch (menu)
@@ -139,7 +139,6 @@ int main(){
             std::cout << " " << cliente[i].account_type << " ";
             std::cout << endl;
         }
-        // aqui empieza lo de GP
         std::cout << "Escribe tu numero de cuenta selecionar la cuenta bancaria" << endl;
         std::cin >> resp;
        
@@ -193,8 +192,6 @@ int main(){
             }while(resp != 1 || resp != 2);
         }
 
-
-        // aqui termina lo de GP
         break;
     
     case 2:
