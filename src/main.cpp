@@ -124,7 +124,7 @@ int main(){
     std::cout << "|      MENU       |" << endl;
     std::cout << "1.- Cuentas clientes" << endl;
     std::cout << "2.- Busqueda de clientes" << endl;
-    std::cout << "3.- Realizar Transferencias" << endl;
+    std::cout << "4.- Realizar Transferencias" << endl;
 
     std::cin >> menu;
     switch (menu)
@@ -297,7 +297,12 @@ int main(){
         do{
             std::cin >> deposito; // se usa la misma variable deposito para el retiro
 
-            if(cliente[c1].dinero_cliente < deposito){
+            if(cliente[c1].dinero_cliente == 0){
+                std:: cout << "No tienes plata " << endl;
+
+                return 0;
+
+            }else if(cliente[c1].dinero_cliente < deposito){
                 std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
                 std::cout << "Debe colocar una cantidad menor o igual a la actual " << endl;
                 std::cout << "Ingrese valor valido: " << endl;
