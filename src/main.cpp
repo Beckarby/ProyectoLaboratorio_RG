@@ -1,8 +1,10 @@
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <bits/stdc++.h>
 #include <string>
+
 using namespace std;
 
 template <typename T>
@@ -21,10 +23,14 @@ struct Cuenta {
     long long int account_number;
     string account_type;
     string suspend;
+    float dinero_cliente = 0.0;
 
 }cliente[1000];
 
-ifstream data_client("C:/Users/HOME/Desktop/trabajos/programas/ProyectoLaboratorio_RG/datos/clients.csv");
+fstream registro;
+fstream createfile("Registro.csv", ios::out);
+    
+ifstream data_client("../datos/clients.csv");
 
 int main(){
     int menu = 0;
@@ -39,12 +45,20 @@ int main(){
     int N;
     int n;
     int size;
+    int c1 = 0;
+    int c2 = 0;
+    long long int resp = 0;
+    float deposito = 0;
     long long int OrderByNumAccount[1000];
     long long int UnOrderedNumAccount[1000];
     string OrderByNameClient[1000];
     string UnOrderedNameClient[1000];
     long long int OrderByID[1000];
     long long int UnOrderedClientID[1000];
+    
+    createfile << "Nombre,C.I,Cuenta,Cuenta del deposito,Monto" << endl;
+
+    registro.open("registro.csv", ios::app);
 
     if(!data_client.is_open()){
         std::cout << "El archivo no ha sido encontrado" << endl;
@@ -74,7 +88,12 @@ int main(){
             case 4:
                 cliente[nline].suspend = word;
                 break;
+            case 5:
+                cliente[nline].dinero_cliente = 0.0;
+            break;
             }
+            
+
             count++;
             
         }
@@ -105,6 +124,7 @@ int main(){
     std::cout << "|      MENU       |" << endl;
     std::cout << "1.- Cuentas clientes" << endl;
     std::cout << "2.- Busqueda de clientes" << endl;
+    std::cout << "3.- Realizar Transferencias" << endl;
 
     std::cin >> menu;
     switch (menu)
@@ -119,6 +139,62 @@ int main(){
             std::cout << " " << cliente[i].account_type << " ";
             std::cout << endl;
         }
+        // aqui empieza lo de GP
+        std::cout << "Escribe tu numero de cuenta selecionar la cuenta bancaria" << endl;
+        std::cin >> resp;
+       
+       c1 = linearSearch(UnOrderedClientID, N, resp);
+
+        std::cout << "Tu tipo de cuenta es:" << cliente[c1].account_type << endl;
+        if (cliente[c1].dinero_cliente == 0){
+            std::cout << "No tiene dinero suficiente en su cuenta has un deposito inicial" << endl;
+            std::cout << "Ingrese la cantidad del deposito" << endl;
+            std::cin >> deposito;
+
+            cliente[N].dinero_cliente = deposito;
+
+        }else if(cliente[N].dinero_cliente > 0){
+            std::cout << "Quieres hacer un deposito o un retiro...Selecione la opcion:" << endl;
+            std::cout << "1-hacer un deposito en tu cuenta" << endl;
+            std::cout << "2-hacer un retiro" << endl;
+
+            do{
+             std::cin >> resp;
+
+                if(resp == 1){
+                 std::cout << "Tu saldo actual es: " << cliente[N].dinero_cliente << endl;
+                 std::cout << "Ingrese la cantidad del deposito: " << endl;
+                 std::cin >> deposito;
+
+                 cliente[N].dinero_cliente = cliente[N].dinero_cliente + deposito;
+                 
+                }else if (resp == 2 ){
+                 std::cout << "Tu saldo actual es: " << cliente[N].dinero_cliente << endl;
+                 std::cout << "Ingrese la cantidad a retirar: " << endl;
+                 do{
+                   std::cin >> deposito; // se usa la misma variable deposito para el retiro
+
+                   if(cliente[N].dinero_cliente < deposito){
+                     std::cout << "Debe colocar una cantidad menor o igual a la actual " << endl;
+                     std::cout << "Ingrese valor valido: " << endl;
+
+                    }else {
+                        cliente[N].dinero_cliente = cliente[N].dinero_cliente - deposito;
+
+                        std::cout << "Tu saldo actual ahora es de : " << cliente[N].dinero_cliente << endl;
+                    }
+
+                 }while(cliente[N].dinero_cliente < deposito);
+
+                }else{
+                 std::cout << "Error..." << endl;
+                 std::cout << "numero invalido ingrese un valor correcto" << endl;
+                }
+            }while(resp != 1 || resp != 2);
+        }
+
+
+        // aqui termina lo de GP
         break;
     
     case 2:
@@ -143,7 +219,6 @@ int main(){
             } else {
                 std::cout << "CLIENTE ENCONTRADO" << endl;
                 result = linearSearch(UnOrderedNumAccount, N, filtro_codigo);
-                std::cout << "Posicion del cliente: " << result << endl;
                 std::cout << "Nombre: " << cliente[result].client << endl;
                 std::cout << "tipo de cuenta: " << cliente[result].account_type << endl;
                 std::cout << "cedula: " << cliente[result].ci << endl;
@@ -152,8 +227,6 @@ int main(){
 
                 }
             }
-            
-
             break;
         
         case 2:
@@ -199,15 +272,52 @@ int main(){
                     std::cout << "CUENTA SUSPENDIDA" << endl;
                 }
                 
-            }
-            
-            
-            
+            }    
         }
         break;
+    case 3:
+        std::cout<< "Vamos a realizar transferencias " << endl;
+        std::cout<< "coloque cual es nu numero de cuenta para realizar la transferencia" << endl;
+        std::cin>> resp;
+
+        c1 = linearSearch(UnOrderedClientID, N, resp);
+
+        std::cout << "A que cuenta quieres realizar la transferencia?? " << endl;
+        std::cout << "Coloque el numero de cuenta: " << endl;
+        std::cin>> resp;
+
+        c2 = linearSearch(UnOrderedClientID, N, resp);
+        /*Tiene que buscar el valor de la segunda persona al quien pertenece la segunda cuenta
+        
+        se debe guardar el numero de posicion que estan los 2 en 2 variables diferentes para hacer la comparacion
+        se puede utilizar c1 y c2 para cuenta 1 y cuenta 2 */
+
+        std::cout << "Cual es la cantidad a depositar: " << endl;
+
+        do{
+            std::cin >> deposito; // se usa la misma variable deposito para el retiro
+
+            if(cliente[c1].dinero_cliente < deposito){
+                std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
+                std::cout << "Debe colocar una cantidad menor o igual a la actual " << endl;
+                std::cout << "Ingrese valor valido: " << endl;
+
+                }else {
+                cliente[c1].dinero_cliente = cliente[c1].dinero_cliente - deposito ;
+                cliente[c2].dinero_cliente = cliente[c2].dinero_cliente + deposito;
+
+                std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
+                }
+
+            }while(cliente[c1].dinero_cliente < deposito);
+
+        registro << cliente[c1].client +","<<+cliente[c1].ci + "," <<cliente[c1].account_number + "," 
+        <<cliente[c2].account_number + "," <<+deposito << endl;
     }
 
 }
+
+
 
 template <typename T>
 int partition(T arr[], int start, int end){
