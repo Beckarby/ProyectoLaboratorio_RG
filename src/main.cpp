@@ -1,12 +1,3 @@
-/* 
-1.-Visualizacion de los datos de clientes y sus cuentas de ahorro o corriente
-2.-Establecer un buscador por codigo de cuenta, nombre del cliente o cedula
-6.-Suspender cuentas de clientes y dar aviso de ello
-
-NO RECONOCE NOMBRES NI NUMEROS DE CUENTA
-
-
-*/
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -40,7 +31,6 @@ int main(){
     int count = 0;
     int nline = 0;
     string line, word;
-    //int num_cliens;
     int filtro = 0;
     long long int filtro_codigo;
     string filtro_nombre;
