@@ -30,7 +30,7 @@ struct Cuenta {
 fstream registro;
 fstream createfile("Registro.csv", ios::out);
     
-ifstream data_client("../datos/clients.csv");
+ifstream data_client("../../datos/clients.csv");
 
 int main(){
     int menu = 0;
@@ -47,6 +47,7 @@ int main(){
     int size;
     int c1 = 0;
     int c2 = 0;
+    int resp_2 = 0;
     long long int resp = 0;
     float deposito = 0;
     long long int OrderByNumAccount[1000];
@@ -92,10 +93,7 @@ int main(){
                 cliente[nline].dinero_cliente = 0.0;
             break;
             }
-            
-
             count++;
-            
         }
         nline++;
         count = 0;
@@ -121,14 +119,15 @@ int main(){
 
     
 
+    do{
     std::cout << "|      MENU       |" << endl;
     std::cout << "1.- Cuentas clientes" << endl;
     std::cout << "2.- Busqueda de clientes" << endl;
     std::cout << "3.- Realizar Transferencias" << endl;
 
     std::cin >> menu;
-    switch (menu)
-    {
+    switch (menu){
+
     case 1:
         std::cout << "A continuacion se visualizara la data de los clientes" << endl;
         std::cout << "| numero de cuenta |  nombre  |  tipo de cuenta    |" << endl;
@@ -142,7 +141,8 @@ int main(){
         std::cout << "Escribe tu numero de cuenta selecionar la cuenta bancaria" << endl;
         std::cin >> resp;
        
-       c1 = linearSearch(UnOrderedClientID, N, resp);
+       c1 = linearSearch(UnOrderedNumAccount, N, resp);
+       std::cout << c1 << endl;
 
         std::cout << "Tu tipo de cuenta es:" << cliente[c1].account_type << endl;
         if (cliente[c1].dinero_cliente == 0){
@@ -150,9 +150,9 @@ int main(){
             std::cout << "Ingrese la cantidad del deposito" << endl;
             std::cin >> deposito;
 
-            cliente[N].dinero_cliente = deposito;
+            cliente[c1].dinero_cliente = deposito;
 
-        }else if(cliente[N].dinero_cliente > 0){
+        }else if(cliente[c1].dinero_cliente > 0){
             std::cout << "Quieres hacer un deposito o un retiro...Selecione la opcion:" << endl;
             std::cout << "1-hacer un deposito en tu cuenta" << endl;
             std::cout << "2-hacer un retiro" << endl;
@@ -161,29 +161,29 @@ int main(){
              std::cin >> resp;
 
                 if(resp == 1){
-                 std::cout << "Tu saldo actual es: " << cliente[N].dinero_cliente << endl;
+                 std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
                  std::cout << "Ingrese la cantidad del deposito: " << endl;
                  std::cin >> deposito;
 
-                 cliente[N].dinero_cliente = cliente[N].dinero_cliente + deposito;
+                 cliente[c1].dinero_cliente = cliente[c1].dinero_cliente + deposito;
                  
                 }else if (resp == 2 ){
-                 std::cout << "Tu saldo actual es: " << cliente[N].dinero_cliente << endl;
+                 std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
                  std::cout << "Ingrese la cantidad a retirar: " << endl;
                  do{
                    std::cin >> deposito; // se usa la misma variable deposito para el retiro
 
-                   if(cliente[N].dinero_cliente < deposito){
+                   if(cliente[c1].dinero_cliente < deposito){
                      std::cout << "Debe colocar una cantidad menor o igual a la actual " << endl;
                      std::cout << "Ingrese valor valido: " << endl;
 
                     }else {
-                        cliente[N].dinero_cliente = cliente[N].dinero_cliente - deposito;
+                        cliente[c1].dinero_cliente = cliente[c1].dinero_cliente - deposito;
 
-                        std::cout << "Tu saldo actual ahora es de : " << cliente[N].dinero_cliente << endl;
+                        std::cout << "Tu saldo actual ahora es de : " << cliente[c1].dinero_cliente << endl;
                     }
 
-                 }while(cliente[N].dinero_cliente < deposito);
+                 }while(cliente[c1].dinero_cliente < deposito);
 
                 }else{
                  std::cout << "Error..." << endl;
@@ -295,27 +295,34 @@ int main(){
             std::cin >> deposito; // se usa la misma variable deposito para el retiro
 
             if(cliente[c1].dinero_cliente == 0){
-                std:: cout << "No tienes plata " << endl;
-
-                return 0;
+                std::cout << "No tienes dinero " << endl;
+                std::cout << "Para hacer una tranferencia haga un deposito previo" << endl;
+                resp_2 = 1;
 
             }else if(cliente[c1].dinero_cliente < deposito){
                 std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
                 std::cout << "Debe colocar una cantidad menor o igual a la actual " << endl;
                 std::cout << "Ingrese valor valido: " << endl;
 
-                }else {
+            }else {
                 cliente[c1].dinero_cliente = cliente[c1].dinero_cliente - deposito ;
                 cliente[c2].dinero_cliente = cliente[c2].dinero_cliente + deposito;
 
                 std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
-                }
+            }
 
-            }while(cliente[c1].dinero_cliente < deposito);
+        }while(cliente[c1].dinero_cliente < deposito && resp_2 != 1);
 
         registro << cliente[c1].client +","<<+cliente[c1].ci + "," <<cliente[c1].account_number + "," 
         <<cliente[c2].account_number + "," <<+deposito << endl;
+        std::cout << "Quieres seguir ??:" << endl;
+        std::cout << "1-Para si " << endl;
+        std::cout << "2-Para no " << endl;
+        std::cin >> resp_2;
     }
+
+      system("cls");
+    }while(resp_2 != 2);
 
 }
 
