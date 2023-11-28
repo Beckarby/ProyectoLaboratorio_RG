@@ -170,20 +170,21 @@ int main(){
                 }else if (resp == 2 ){
                  std::cout << "Tu saldo actual es: " << cliente[c1].dinero_cliente << endl;
                  std::cout << "Ingrese la cantidad a retirar: " << endl;
-                 do{
-                   std::cin >> deposito; // se usa la misma variable deposito para el retiro
+                 std::cin >> deposito; // se usa la misma variable deposito para el retiro
 
                    if(cliente[c1].dinero_cliente < deposito){
-                     std::cout << "Debe colocar una cantidad menor o igual a la actual " << endl;
-                     std::cout << "Ingrese valor valido: " << endl;
+                       do{
+                         std::cout << "Debe colocar una cantidad menor o igual a la actual " << endl;
+                         std::cout << "Ingrese valor valido: " << endl;
+                         std::cin >> deposito;
 
-                    }else {
+                        }while(cliente[c1].dinero_cliente < deposito);
+
+                    }else{
                         cliente[c1].dinero_cliente = cliente[c1].dinero_cliente - deposito;
 
                         std::cout << "Tu saldo actual ahora es de : " << cliente[c1].dinero_cliente << endl;
                     }
-
-                 }while(cliente[c1].dinero_cliente < deposito);
 
                 }else{
                  std::cout << "Error..." << endl;
@@ -224,6 +225,8 @@ int main(){
 
                 }
             }
+
+            
             break;
         
         case 2:
