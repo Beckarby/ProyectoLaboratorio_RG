@@ -1,7 +1,6 @@
 #include "quicksort.h"
 
-
-template <typename T>
+template<typename T>
 int partition(T arr[], int start, int end){
 	
 	int pivot = end;
@@ -17,7 +16,7 @@ int partition(T arr[], int start, int end){
 	
 }
 
-template <typename T>
+template<typename T>
 void quicksort(T arr[], int start, int end ){
 
 	if(start<end){
@@ -27,3 +26,9 @@ void quicksort(T arr[], int start, int end ){
 	}
 	
 }
+
+template void quicksort<int>(int arr[], int start, int end);
+template void quicksort<std::string>(std::string arr[], int start, int end);
+template void quicksort<float>(float arr[], int start, int end);
+template void quicksort<long long>(long long arr[], int start, int end);
+template void quicksort<char>(char arr[], int start, int end);

@@ -1,4 +1,4 @@
-#include "binarySeach.h"
+#include "binarySearch.h"
 
 template<typename T>
 int binarySearch(T arr[], int n, T x)
@@ -17,3 +17,9 @@ int binarySearch(T arr[], int n, T x)
 	}
 	return -1;
 }
+
+
+template int binarySearch<std::string>(std::string arr[], int n, std::string x);
+template int binarySearch<int>(int arr[], int n, int x);
+template int binarySearch<float>(float arr[], int n, float x);
+template int binarySearch<long long>(long long arr[], int n, long long x);
