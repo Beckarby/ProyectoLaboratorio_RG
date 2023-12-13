@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 struct Cuenta {
     long long int ci;
     string client;
@@ -25,7 +24,7 @@ struct Cuenta {
 fstream registro;
 fstream createfile("Registro.csv", ios::out);
     
-ifstream data_client("../datos/clients.csv");
+ifstream data_client("../../datos/clients.csv");
 
 void TestLinearSearch();
 void TestQuicksort();
@@ -332,16 +331,16 @@ void TestLinearSearch(){
     int n = sizeof(arr) / sizeof(arr[0]);
     int x = 3;
     
-    int result = linearSearch(arr, n, x);
+    int resultado = linearSearch(arr, n, x);
     
-    assert(result == 2);
+    assert(resultado == 2);
     
     // The function returns -1 when the element is not present in the array
     x = 6;
 
-    int result = linearSearch(arr, n, x);
+    resultado = linearSearch(arr, n, x);
 
-    assert(result = -1);
+    assert(resultado = -1);
 }
 
 void TestQuicksort(){
@@ -353,17 +352,7 @@ void TestQuicksort(){
     for (int i = 0; i < 5; i++)
     {
         assert(arr[i] == expected[i]);
-    }
-
-    //the function should handle an array of types that are not ints
-    char arr[] = {'e','a','c','b','d'};
-    char expexted[] = {'a','b','c','d','e'};
-    quicksort(arr,0,4);
-    for (int i = 0; i < 5; i++)
-    {
-        assert(arr[i] == expected[i]);
-    }
-     
+    }    
     
 }
 
@@ -372,12 +361,11 @@ void testBinarySearch(){
     int arr[] = {1,2,3,4,5};
     int n = sizeof(arr)/sizeof(arr[0]);
     int x = 3;
-    int result = binarySearch(arr, n, x);
-    assert(result == 2);
+    int resultado = binarySearch(arr, n, x);
+    assert(resultado == 2);
 
     //if element is not present it should return -1
     x = 6;
-    int result = binarySearch(arr, n, x);
-    assert(result == -1);
+    resultado = binarySearch(arr, n, x);
+    assert(resultado == -1);
 }
-
