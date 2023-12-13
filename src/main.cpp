@@ -16,6 +16,9 @@ int binarySearch(T arr[], int n, T x);
 template <typename T>
 int linearSearch(T arr[], int n, T x);
 
+void agregar_cliente();
+void eliminar_cliente();
+
 
 struct Cuenta {
     long long int ci;
@@ -25,7 +28,7 @@ struct Cuenta {
     string suspend;
     float dinero_cliente = 0.0;
 
-}cliente[1000];
+}cliente[2000];
 
 fstream registro;
 fstream createfile("Registro.csv", ios::out);
@@ -34,6 +37,7 @@ ifstream data_client("../../datos/clients.csv");
 
 int main(){
     int menu = 0;
+    int cont_nuevo = 0;
     int count = 0;
     int nline = 0;
     string line, word;
@@ -124,6 +128,8 @@ int main(){
     std::cout << "1.- Cuentas clientes" << endl;
     std::cout << "2.- Busqueda de clientes" << endl;
     std::cout << "3.- Realizar Transferencias" << endl;
+    std::cout << "4.-Agregar nuevo cliente" << endl;
+    std::cout << "5.-Eliminar un cliente" << endl;
 
     std::cin >> menu;
     switch (menu){
@@ -318,18 +324,117 @@ int main(){
 
         registro << cliente[c1].client +","<<+cliente[c1].ci + "," <<cliente[c1].account_number + "," 
         <<cliente[c2].account_number + "," <<+deposito << endl;
+        break;
+     case 4:    
+       
+        agregar_cliente();
+        
+        break;
+
+     case 5:
+
+     eliminar_cliente();
+
+      break;
+       
+       
         std::cout << "Quieres seguir ??:" << endl;
         std::cout << "1-Para si " << endl;
         std::cout << "2-Para no " << endl;
         std::cin >> resp_2;
-    }
+     }
+     
+     cout << "Quieres seguir:" << endl;
+     cout << "1.-Para si" << endl;
+     cout << "2.-para no" << endl;
+     cin >> resp_2;
 
       system("cls");
     }while(resp_2 != 2);
 
+    data_client.close();
+    registro.close();
+
 }
 
+void agregar_cliente(){
+    ofstream infile;
+    string agg;
+    int cont_clientes_agg = 1000 ;
+    int resp_f = 0;
 
+    infile.open("../clients.csv", ios::app);
+    infile.seekp(1001);
+    infile << endl;
+
+    do{
+      cont_clientes_agg = cont_clientes_agg + 1 ;
+     cout << "Vamos a agregar a un nuevo cliente " << endl;
+     cout << "Ingrese el numero de Ci:" << endl;
+     cin >> agg;
+
+     cliente[cont_clientes_agg].ci = stoi(agg);
+
+     cout << "Ingrese el nombre del cliente:" << endl;
+     cin.get();
+     getline(cin,agg);
+
+     cliente[cont_clientes_agg].client = agg;
+
+     cout << "Ingrese el numero de cuenta:" << endl;
+     cin >> agg;
+
+     cliente[cont_clientes_agg].account_number = stoi(agg);
+
+     cout << "Ingrese el tipo de cuenta:" << endl;
+     cin >> agg;
+
+     cliente[cont_clientes_agg].account_type = agg;
+
+     cout << "Ingrese si esta suspendida con true o false:" << endl;
+     cin >>agg;
+
+     cliente[cont_clientes_agg].suspend = agg;
+
+     infile <<  cliente[cont_clientes_agg].ci << ";" <<  cliente[cont_clientes_agg].client << ";"
+     <<  cliente[cont_clientes_agg].account_number << ";" <<  cliente[cont_clientes_agg].account_type << ";"
+     <<  cliente[cont_clientes_agg].suspend << endl;
+
+     cout << "Quieres agregar a otro:" << endl;
+     cout << "1.-Para si" << endl;
+     cout << "2.-para no" << endl;
+     cin >> resp_f;
+
+    }while (resp_f != 2);
+
+    infile.close();
+
+}
+
+void eliminar_cliente(){
+    ofstream infile;
+    int cont = 1001;
+    int ci = 0;
+    bool existe = false;
+
+    infile.open("../clients.csv", ios::out);
+
+    std::cout << "Ingrese la c.i del cliente a eliminar " << endl;
+    std::cin >> ci;
+
+    for(int i = 0; i < cont ; i++){
+
+        if(cliente[i].ci == ci){
+            existe = true;
+        }else{
+             infile <<  cliente[i].ci << ";" <<  cliente[i].client << ";"
+              <<  cliente[i].account_number << ";" <<  cliente[i].account_type << ";"
+              <<  cliente[i].suspend << endl;
+        }
+
+
+    }
+}
 
 template <typename T>
 int partition(T arr[], int start, int end){
