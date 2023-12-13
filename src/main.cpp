@@ -363,7 +363,7 @@ void agregar_cliente(){
     int cont_clientes_agg = 1000 ;
     int resp_f = 0;
 
-    infile.open("../clients.csv", ios::app);
+    infile.open("../datos/clients.csv", ios::app);
     infile.seekp(1001);
     infile << endl;
 
@@ -417,7 +417,7 @@ void eliminar_cliente(){
     int ci = 0;
     bool existe = false;
 
-    infile.open("../clients.csv", ios::out);
+    infile.open("../datos/clients.csv", ios::out);
 
     std::cout << "Ingrese la c.i del cliente a eliminar " << endl;
     std::cin >> ci;
